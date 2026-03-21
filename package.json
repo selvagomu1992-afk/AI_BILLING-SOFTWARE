@@ -1,0 +1,17 @@
+{
+  "name": "ai-billing-software",
+  "version": "1.0.0",
+  "description": "",
+  "main": "Server/server.js",
+  "scripts": {
+    "build": "cd Client && npm install && npm run build",
+    "start": "cd Server && npm install && npm start",
+    "heroku-postbuild": "npm run build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "engines": {
+    "node": "18.x"
+  }
+}
