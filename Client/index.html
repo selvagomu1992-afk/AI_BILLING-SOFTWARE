@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="bill.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI_Invoice</title>
+  <!-- Cashfree Web SDK -->
+  <script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
+  <!-- Define PaymentJSInterface to prevent mobile SDK errors in web -->
+  <script>
+    if (!window.PaymentJSInterface) {
+      window.PaymentJSInterface = {
+        onSuccess: function(data) { console.log('Payment success:', data); },
+        onError: function(error) { console.error('Payment error:', error); },
+        onFailure: function(failure) { console.error('Payment failure:', failure); }
+      };
+    }
+  </script>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+
+</html>
