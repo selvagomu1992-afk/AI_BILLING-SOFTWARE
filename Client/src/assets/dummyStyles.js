@@ -217,10 +217,7 @@ export const createInvoiceStyles = {
   itemRow: "min-w-0",
 
   itemColDescription:
-    "col-span-6 sm:col-span-6 md:col-span-6 lg:col-span-3 min-w-0",
-
-  itemColHSN:
-    "col-span-6 sm:col-span-2 md:col-span-2 lg:col-span-1 min-w-0",
+    "col-span-6 sm:col-span-6 md:col-span-6 lg:col-span-6 min-w-0",
 
   itemColQuantity:
     "col-span-6 sm:col-span-2 md:col-span-2 lg:col-span-2 min-w-0",

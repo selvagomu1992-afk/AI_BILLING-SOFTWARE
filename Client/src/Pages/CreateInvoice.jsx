@@ -223,7 +223,7 @@ export default function CreateInvoice() {
             fromGst: "",
             client: { name: "", email: "", address: "", phone: "" },
             items: [
-                { id: uid(), description: "Service / Item", hsn: "", qty: 1, unitPrice: 0 },
+                { id: uid(), description: "Service / Item", qty: 1, unitPrice: 0 },
             ],
             currency: "INR",
             status: "draft",
@@ -259,7 +259,7 @@ export default function CreateInvoice() {
         setItems((arr) => {
             const copy = arr.slice();
             const it = { ...(copy[idx] || {}) };
-            if (key === "description" || key === "hsn") it[key] = value;
+            if (key === "description") it[key] = value;
             else it[key] = Number(value) || 0;
             copy[idx] = it;
             setInvoice((inv) => (inv ? { ...inv, items: copy } : inv));
@@ -267,7 +267,7 @@ export default function CreateInvoice() {
         });
     }
     function addItem() {
-        const it = { id: uid(), description: "", hsn: "", qty: 1, unitPrice: 0 };
+        const it = { id: uid(), description: "", qty: 1, unitPrice: 0 };
         setItems((arr) => {
             const next = [...arr, it];
             setInvoice((inv) => (inv ? { ...inv, items: next } : inv));
@@ -1223,28 +1223,6 @@ export default function CreateInvoice() {
                                                 placeholder="Item description"
                                                 title={it?.description ?? ""}
                                                 aria-label={`Item ${idx + 1} description`}
-                                            />
-                                        </div>
-
-                                        {/* HSN */}
-                                        <div className={createInvoiceStyles.itemColHSN}>
-                                            <label
-                                                className={createInvoiceStyles.itemsFieldLabel}
-                                                htmlFor={`hsn-${idx}`}
-                                            >
-                                                HSN
-                                            </label>
-                                            <input
-                                                id={`hsn-${idx}`}
-                                                className={createInvoiceStyles.itemsInput}
-                                                value={it?.hsn ?? ""}
-                                                onChange={(e) =>
-                                                    updateItem(idx, "hsn", e.target.value)
-                                                }
-                                                placeholder="HSN Code"
-                                                title={it?.hsn ?? ""}
-                                                aria-label={`Item ${idx + 1} HSN`}
-                                                required
                                             />
                                         </div>
 

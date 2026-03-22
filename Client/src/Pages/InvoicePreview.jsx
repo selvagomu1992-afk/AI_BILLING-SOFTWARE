@@ -624,15 +624,7 @@ export default function InvoicePreview() {
                                         </th>
                                         <th
                                             style={{
-                                                width: "10%",
-                                                textAlign: "center",
-                                                minWidth: "70px",
-                                            }}
-                                        >
-                                            HSN
-                                        </th>
-                                        <th
-                                            style={{
+
                                                 width: "15%",
                                                 textAlign: "right",
                                                 minWidth: "70px",
@@ -667,7 +659,6 @@ export default function InvoicePreview() {
                                                 <td className={invoicePreviewStyles.tableCell}>
                                                     {it.description || "Item Description"}
                                                 </td>
-                                                <td style={{ textAlign: "center" }}>{it.hsn || ""}</td>
                                                 <td style={{ textAlign: "right" }}>{it.qty || 0}</td>
                                                 <td style={{ textAlign: "right" }}>
                                                     {currencyFmt(it.unitPrice, invoiceCurrency)}

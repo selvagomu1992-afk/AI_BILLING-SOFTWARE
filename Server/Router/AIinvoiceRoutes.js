@@ -35,7 +35,7 @@ function buildInvoicePrompt(promptText) {
         fromAddress: "",
         fromPhone: "",
         client: { name: "", email: "", address: "", phone: "" },
-        items: [{ id: "1", description: "", hsn: "", qty: 1, unitPrice: 0 }],
+        items: [{ id: "1", description: "", qty: 1, unitPrice: 0 }],
         taxPercent: 18,
         notes: ""
     };
@@ -225,7 +225,6 @@ AIinvoiceRoute.post('/generate', async (req, res) => {
         parsed.items = parsed.items.map((item) => ({
             id: item.id || Date.now() + Math.random(),
             description: item.description || "",
-            hsn: item.hsn || "",
             qty: typeof item.qty === "number" ? item.qty : 1,
             unitPrice: typeof item.unitPrice === "number" ? item.unitPrice : 0,
         }));
