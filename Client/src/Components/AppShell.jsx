@@ -322,10 +322,8 @@ const AppShell = () => {
                                         <span className={appShellStyles.logoutText}>Logout</span>
                                     </button>
                                 ) : (
-                                    <button onClick={logout} className='w-full flex items-center justify-center p-3
-                                     rounded-xl text-red-600 hover:bg-red-50 hover:shadow-md transition-all duration-300' >
-
-                                        <LogoutIcon className="w-5 h-5 hover:scale-110 transition-transform" />
+                                    <button onClick={logout} className={`${appShellStyles.logoutButton} justify-center`} >
+                                        <LogoutIcon className={appShellStyles.logoutIcon} />
                                     </button>
                                 )}
                                 <div className={appShellStyles.collapseSection}>
