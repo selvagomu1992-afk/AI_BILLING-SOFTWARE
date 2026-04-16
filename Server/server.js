@@ -10,6 +10,7 @@ import AIInvoiceRoute from "./Router/AIinvoiceRoutes.js";
 import PaymentRoute from "./Router/PaymentRoutes.js";
 
 const PORT = process.env.PORT || 5000;
+const CLIENT_URL = process.env.CLIENT_URL || "https://www.maxxinvoice.com";
 
 
 const app = express();
@@ -18,8 +19,19 @@ const app = express();
 
 
 //Middeleware
+const allowedOrigins = [
+    CLIENT_URL,
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://localhost:5174",
+    "http://127.0.0.1:5174",
+    "http://localhost:5175",
+    "http://127.0.0.1:5175",
+    "http://localhost:5176",
+    "http://127.0.0.1:5176"
+];
 app.use(cors({
-    origin: ["http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:5174", "http://127.0.0.1:5174", "http://localhost:5175", "http://127.0.0.1:5175", "http://localhost:5176", "http://127.0.0.1:5176"],
+    origin: allowedOrigins,
     credentials: true
 }));
 app.use(clerkMiddleware())
