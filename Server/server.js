@@ -10,6 +10,7 @@ import AIInvoiceRoute from "./Router/AIinvoiceRoutes.js";
 import PaymentRoute from "./Router/PaymentRoutes.js";
 
 const PORT = process.env.PORT || 5000;
+const CLIENT_URL = process.env.CLIENT_URL || "https://ai-billing-software.onrender.com";
 
 
 
