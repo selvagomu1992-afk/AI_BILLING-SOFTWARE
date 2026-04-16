@@ -10,7 +10,7 @@ import AIInvoiceRoute from "./Router/AIinvoiceRoutes.js";
 import PaymentRoute from "./Router/PaymentRoutes.js";
 
 const PORT = process.env.PORT || 5000;
-const CLIENT_URL = process.env.CLIENT_URL || "https://www.maxxinvoice.com";
+
 
 
 const app = express();
@@ -59,4 +59,15 @@ app.use((req, res) => {
 
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server is running on port http://localhost:${PORT}`);
+});
+
+// Global error handlers
+process.on('uncaughtException', (err) => {
+    console.error('Uncaught Exception:', err);
+    process.exit(1);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+    process.exit(1);
 });
