@@ -168,22 +168,28 @@ const Dasboard = () => {
             const response = await fetch(`${API_BASE}/api/invoice`, {
                 headers: header,
                 method: "GET",
-
             });
-            const json = await response.json().catch(() => null);
-            if (!json) throw new Error("Failed to fetch invoice");
 
+            let json = null;
+            try {
+                json = await response.json();
+            } catch (parseErr) {
+                console.warn("Failed to parse invoice response JSON:", parseErr);
+            }
 
             if (response.status === 401) {
-                // unauthorized - prompt login
                 setError("Unauthorized. Please sign in.");
                 setStoredInvoices([]);
                 return;
             }
 
             if (!response.ok) {
-                const msg = json?.message || `Failed to fetch (${response.status})`;
+                const msg = json?.message || json?.error || `Failed to fetch invoices (${response.status})`;
                 throw new Error(msg);
+            }
+
+            if (!json || typeof json !== "object") {
+                throw new Error("Invalid response format from server");
             }
 
             const raw = json?.data || [];
