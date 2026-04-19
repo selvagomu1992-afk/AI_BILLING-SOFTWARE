@@ -161,7 +161,7 @@ const Pricing = () => {
             try {
                 const token = await getToken();
                 if (!token) return;
-                const res = await fetch('http://localhost:5000/api/businessprofile/get', {
+                const res = await fetch('https://ai-billing-software-4.onrender.com/api/businessprofile/get', {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 if (res.ok) {
@@ -310,7 +310,7 @@ const Pricing = () => {
                 return;
             }
 
-            const sessionRes = await fetch(`http://localhost:5000/api/payment/create-checkout-session`, {
+            const sessionRes = await fetch(`https://ai-billing-software-4.onrender.com/api/payment/create-checkout-session`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

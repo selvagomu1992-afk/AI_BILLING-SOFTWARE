@@ -3,7 +3,7 @@ import BusinessProfile from "../Models/BusinessProfileModles.js";
 import mongoose from "mongoose";
 import path from "path";
 
-const API_BASE = 'http://localhost:5000'
+const API_BASE = 'https://ai-billing-software-4.onrender.com'
 
 // for helper function for uploading files to public
 
