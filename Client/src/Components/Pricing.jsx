@@ -383,53 +383,28 @@ const Pricing = () => {
 
             // Initialize Cashfree
             console.log("Initializing Cashfree");
-            const cashfreeMode = import.meta.env.VITE_CASHFREE_MODE || "production";
-            let cashfree;
-            try {
-                // Try the function-style initializer used in the SDK
-                if (window.Cashfree && typeof window.Cashfree === 'function') {
-                    cashfree = window.Cashfree({ mode: cashfreeMode });
-                    console.log("Cashfree instance created with config:", { mode: cashfreeMode });
-                } else if (window.Cashfree && typeof window.Cashfree.checkout === 'function') {
-                    // Direct checkout method (already initialized)
-                    cashfree = window.Cashfree;
-                    console.log("Using direct Cashfree.checkout method");
-                } else {
-                    throw new Error("Cashfree SDK not properly loaded");
-                }
-                console.log("Cashfree instance:", cashfree);
-                console.log("Available methods:", typeof cashfree.checkout === 'function' ? 'checkout available' : 'checkout not available');
-            } catch (initError) {
-                console.error("Failed to initialize Cashfree:", initError);
-                throw initError;
+            const cashfreeMode = import.meta.env.VITE_CASHFREE_MODE || "PRODUCTION";
+            console.log("Cashfree mode:", cashfreeMode);
+
+            if (!window.Cashfree || typeof window.Cashfree !== 'function') {
+                throw new Error("Cashfree SDK not loaded properly");
             }
 
             console.log("Starting payment with session ID:", sessionData.payment_session_id);
 
-            // Start payment
+            // Start payment using static method
             try {
-                let checkoutResult;
-                if (typeof cashfree.checkout === 'function') {
-                    // Instance method
-                    checkoutResult = await cashfree.checkout({
-                        paymentSessionId: sessionData.payment_session_id,
-                        mode: cashfreeMode,
-                        redirectTarget: "_self"
-                    });
-                } else if (typeof window.Cashfree.checkout === 'function') {
-                    // Static method
-                    checkoutResult = await window.Cashfree.checkout({
-                        paymentSessionId: sessionData.payment_session_id,
-                        mode: cashfreeMode,
-                        redirectTarget: "_self"
-                    });
-                } else {
-                    throw new Error("No checkout method available");
-                }
+                const checkoutOptions = {
+                    paymentSessionId: sessionData.payment_session_id,
+                    redirectTarget: "_modal"
+                };
+                console.log("Checkout options:", checkoutOptions);
+
+                const checkoutResult = await window.Cashfree.checkout(checkoutOptions);
                 console.log("Checkout initiated successfully:", checkoutResult);
             } catch (checkoutError) {
                 console.error("Cashfree checkout error:", checkoutError);
-                throw checkoutError;
+                throw new Error(`Checkout failed: ${checkoutError.message || checkoutError}`);
             }
 
         } catch (err) {
