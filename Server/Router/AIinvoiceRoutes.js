@@ -1,21 +1,28 @@
 import express from "express";
 import { GoogleGenAI } from "@google/genai";
 import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
 import { getAuth } from "@clerk/express";
 import BusinessProfile from "../Models/BusinessProfileModles.js";
 import Invoice from "../Models/InvoiceModels.js";
 
-dotenv.config();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 const AIinvoiceRoute = express.Router();
 
 const API_KEY = process.env.GEMINI_API_KEY;
 if (!API_KEY) {
-    console.log("API Key is not defined");
+    console.error("Gemini API key is not defined. Set GEMINI_API_KEY in the root .env or environment variables.");
 }
 
-const ai = new GoogleGenAI({ apiKey: API_KEY });
+let ai = null;
+if (API_KEY) {
+    ai = new GoogleGenAI({ apiKey: API_KEY });
+}
 
 //-----------MODELS TO TRY-------
 const MODEL_CANDIDATES = [

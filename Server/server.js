@@ -1,16 +1,23 @@
-import 'dotenv/config';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import dotenv from 'dotenv';
 import express from "express";
 import cors from "cors";
 import ConnectDB from "./Config/ConnectDB.js";
 import { clerkMiddleware } from '@clerk/express';
-import path from 'path';
 import InvoiceRouter from "./Router/InvoiceRoures.js";
 import BusinessProfileRoute from "./Router/BusinessProfileRoutes.js";
 import AIInvoiceRoute from "./Router/AIinvoiceRoutes.js";
 import PaymentRoute from "./Router/PaymentRoutes.js";
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
+
 const PORT = process.env.PORT || 5000;
-const CLIENT_URL = process.env.CLIENT_URL || "https://ai-billing-software.onrender.com";
+const CLIENT_URL = process.env.CLIENT_URL || "https://ai-billing-software-4.onrender.com";
+
 
 
 
