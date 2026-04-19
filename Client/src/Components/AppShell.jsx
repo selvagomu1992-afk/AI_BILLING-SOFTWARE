@@ -3,6 +3,7 @@ import { appShellStyles } from '../assets/dummyStyles'
 import logo from '../assets/logo.png'
 import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { useClerk, useUser, useAuth } from '@clerk/clerk-react'
+import { API_BASE } from '../config/api'
 
 // Helper components defined outside to avoid render-time creation
 const CollapseIcon = ({ className = "w-4 h-4", collapsed }) => (
@@ -193,7 +194,7 @@ const AppShell = () => {
             try {
                 const token = await getToken();
                 if (!token) return;
-                const res = await fetch('https://ai-billing-software-7.onrender.com/api/businessprofile/get', {
+                const res = await fetch(`${API_BASE}/api/businessprofile/get`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 if (res.ok) {

@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { pricingCardStyles, pricingStyles } from '../assets/dummyStyles'
 import { useClerk, useAuth, SignedIn, SignedOut } from '@clerk/clerk-react'
 import { useNavigate } from 'react-router-dom'
+import { API_BASE } from '../config/api'
 
 const PricingCard = ({
     title,
@@ -161,7 +162,7 @@ const Pricing = () => {
             try {
                 const token = await getToken();
                 if (!token) return;
-                const res = await fetch('https://ai-billing-software-7.onrender.com/api/businessprofile/get', {
+                const res = await fetch(`${API_BASE}/api/businessprofile/get`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 if (res.ok) {
@@ -310,7 +311,7 @@ const Pricing = () => {
                 return;
             }
 
-            const sessionRes = await fetch(`https://ai-billing-software-7.onrender.com/api/payment/create-checkout-session`, {
+            const sessionRes = await fetch(`${API_BASE}/api/payment/create-checkout-session`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
