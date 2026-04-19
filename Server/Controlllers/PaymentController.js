@@ -110,14 +110,16 @@ export const createCheckoutSession = async (req, res) => {
             });
         }
 
+        // Check if response indicates an error
+        const errorMessage = response?.data?.message || response?.data?.error || response?.data?.description || 'Order creation failed';
         console.error('Cashfree order creation failed', {
             status: response?.status,
             data: response?.data,
             headers: response?.headers,
         });
-        return res.status(400).set('Content-Type', 'application/json').json({
+        return res.status(response?.status === 200 ? 400 : (response?.status || 400)).set('Content-Type', 'application/json').json({
             success: false,
-            message: 'Order creation failed',
+            message: errorMessage,
             cashfree: {
                 status: response?.status,
                 data: response?.data,
