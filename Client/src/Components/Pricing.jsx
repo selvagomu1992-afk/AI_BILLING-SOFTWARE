@@ -339,15 +339,24 @@ const Pricing = () => {
             }
 
             if (!sessionRes.ok) {
-                const msg = sessionData?.message || `Payment request failed (${sessionRes.status})`;
+                const msg =
+                    sessionData?.message ||
+                    sessionData?.cashfree?.data?.message ||
+                    sessionData?.cashfree?.data?.error ||
+                    `Payment request failed (${sessionRes.status})`;
                 console.error("Payment endpoint error:", { status: sessionRes.status, data: sessionData, rawText });
-                throw new Error(msg);
+                throw new Error(msg + (rawText ? ` - ${rawText}` : ""));
             }
 
             console.log("Session data received:", sessionData);
 
             if (!sessionData || !sessionData.success || !sessionData.payment_session_id) {
-                throw new Error(sessionData?.message || "Failed to create checkout session");
+                const msg =
+                    sessionData?.message ||
+                    sessionData?.cashfree?.data?.message ||
+                    sessionData?.cashfree?.data?.error ||
+                    `Failed to create checkout session (${sessionRes.status})`;
+                throw new Error(msg + (rawText ? ` - ${rawText}` : ""));
             }
 
             // Load Cashfree JS SDK if not already loaded

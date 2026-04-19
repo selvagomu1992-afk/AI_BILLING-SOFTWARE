@@ -125,14 +125,19 @@ export const createCheckoutSession = async (req, res) => {
         });
 
     } catch (error) {
+        const errorData = error?.response?.data;
         const logged = {
             message: error?.message,
             status: error?.response?.status,
-            data: error?.response?.data,
+            data: errorData,
         };
         console.error('Cashfree Create Order Error:', logged);
 
-        const errorMessage = error?.response?.data?.message || error?.message || 'Internal Server Error';
+        const errorMessage =
+            (errorData && typeof errorData === 'object' && (errorData.message || errorData.error)) ||
+            (typeof errorData === 'string' ? errorData : null) ||
+            error?.message ||
+            'Internal Server Error';
         const responseBody = {
             success: false,
             message: errorMessage,
