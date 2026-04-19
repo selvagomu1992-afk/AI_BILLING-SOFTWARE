@@ -318,6 +318,14 @@ const Pricing = () => {
                     // Authorization: `Bearer ${token}` // Temporarily removed for testing
                 },
                 body: JSON.stringify({ plan: plan, period: billingPeriod })
+            }).catch((err) => {
+                console.error("Fetch network error:", {
+                    error: err.message,
+                    url: `${API_BASE}/api/payment/create-checkout-session`,
+                    apiBase: API_BASE,
+                    stack: err.stack
+                });
+                throw new Error(`Network error connecting to ${API_BASE}: ${err.message}`);
             });
 
             console.log("API response status:", sessionRes.status);
