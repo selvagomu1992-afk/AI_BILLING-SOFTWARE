@@ -2,8 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
 import { invoicePreviewStyles } from "../assets/dummyStyles";
-
-const API_BASE = "https://ai-billing-software-7.onrender.com";
+import { API_BASE } from '../config/api';
 const PROFILE_ENDPOINT = `${API_BASE}/api/businessprofile/get`;
 const INVOICE_ENDPOINT = (id) => `${API_BASE}/api/invoice/${id}`;
 

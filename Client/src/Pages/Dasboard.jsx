@@ -4,8 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@clerk/clerk-react'
 import KpiCard from '../Components/KpiCard';
 import StatusBudge from '../Components/StatusBudge';
-
-const API_BASE = 'https://ai-billing-software-7.onrender.com';
+import { API_BASE } from '../config/api';
 
 function normalizeClient(raw) {
     if (!raw) return { name: "", email: "", address: "", phone: "" };

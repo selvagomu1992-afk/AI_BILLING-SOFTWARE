@@ -5,8 +5,7 @@ import GeminiIcon from "../Components/GeminiIcon";
 import { useNavigate } from "react-router-dom";
 import { invoicesStyles } from "../assets/dummyStyles";
 import { useAuth } from "@clerk/clerk-react";
-
-const API_BASE = "https://ai-billing-software-7.onrender.com";
+import { API_BASE } from '../config/api';
 
 /* ---------- helpers ---------- */
 /* ----------------- frontend-only: normalize image URLs ----------------- */
