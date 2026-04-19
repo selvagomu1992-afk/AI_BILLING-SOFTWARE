@@ -14,7 +14,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const PORT = process.env.PORT || 5000;
-const CLIENT_URL = process.env.CLIENT_URL || "https://ai-billing-software-7.onrender.com";
+const CLIENT_URL = process.env.CLIENT_URL 
 
 
 
@@ -28,14 +28,7 @@ const app = express();
 const allowedOrigins = [
     CLIENT_URL,
     "http://localhost:5173",
-    "http://127.0.0.1:5173",
-    "http://localhost:5174",
-    "http://127.0.0.1:5174",
-    "http://localhost:5175",
-    "http://127.0.0.1:5175",
-    "http://localhost:5176",
-    "http://127.0.0.1:5176",
-    "https://ai-billing-software-6.onrender.com"
+    
 ];
 app.use(cors({
     origin: allowedOrigins,
