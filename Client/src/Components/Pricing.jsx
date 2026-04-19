@@ -311,7 +311,11 @@ const Pricing = () => {
                 return;
             }
 
-            const sessionRes = await fetch(`${API_BASE}/api/payment/create-checkout-session`, {
+            const resolvedApiBase = API_BASE || `${window.location.protocol}//${window.location.host}`;
+            const sessionUrl = `${resolvedApiBase}/api/payment/create-checkout-session`;
+            console.log("Resolved payment API URL:", sessionUrl);
+
+            const sessionRes = await fetch(sessionUrl, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -321,11 +325,11 @@ const Pricing = () => {
             }).catch((err) => {
                 console.error("Fetch network error:", {
                     error: err.message,
-                    url: `${API_BASE}/api/payment/create-checkout-session`,
-                    apiBase: API_BASE,
+                    url: sessionUrl,
+                    apiBase: resolvedApiBase,
                     stack: err.stack
                 });
-                throw new Error(`Network error connecting to ${API_BASE}: ${err.message}`);
+                throw new Error(`Network error connecting to ${sessionUrl}: ${err.message}`);
             });
 
             console.log("API response status:", sessionRes.status);
