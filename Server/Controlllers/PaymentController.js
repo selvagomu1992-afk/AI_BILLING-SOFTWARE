@@ -147,10 +147,7 @@ export const createCheckoutSession = async (req, res) => {
         };
 
         // If Cashfree returned a 200 with an error payload, normalize to 400.
-        let statusCode = error?.response?.status;
-        if (!statusCode || statusCode < 400) {
-            statusCode = 400;
-        }
+        let statusCode = 400; // Always return 400 for errors
 
         return res.status(statusCode).set('Content-Type', 'application/json').json(responseBody);
     }
