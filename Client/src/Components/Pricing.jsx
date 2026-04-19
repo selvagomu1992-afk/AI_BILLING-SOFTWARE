@@ -391,16 +391,21 @@ const Pricing = () => {
 
             // Initialize Cashfree
             console.log("Initializing Cashfree");
-            const cashfreeMode = import.meta.env.VITE_CASHFREE_MODE || "PRODUCTION";
+            const cashfreeMode = (import.meta.env.VITE_CASHFREE_MODE || "sandbox").toLowerCase();
             console.log("Cashfree mode:", cashfreeMode);
 
             if (!window.Cashfree || typeof window.Cashfree !== 'function') {
                 throw new Error("Cashfree SDK not loaded properly");
             }
 
+            // Create Cashfree instance
+            const cashfree = window.Cashfree({
+                mode: cashfreeMode
+            });
+
             console.log("Starting payment with session ID:", sessionData.payment_session_id);
 
-            // Start payment using static method
+            // Start payment
             try {
                 const checkoutOptions = {
                     paymentSessionId: sessionData.payment_session_id,
@@ -408,7 +413,7 @@ const Pricing = () => {
                 };
                 console.log("Checkout options:", checkoutOptions);
 
-                const checkoutResult = await window.Cashfree.checkout(checkoutOptions);
+                const checkoutResult = await cashfree.checkout(checkoutOptions);
                 console.log("Checkout initiated successfully:", checkoutResult);
             } catch (checkoutError) {
                 console.error("Cashfree checkout error:", checkoutError);
