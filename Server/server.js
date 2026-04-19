@@ -14,7 +14,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const PORT = process.env.PORT || 5000;
-const CLIENT_URL = process.env.CLIENT_URL 
+ 
 
 
 
@@ -26,7 +26,7 @@ const app = express();
 
 //Middeleware
 const allowedOrigins = [
-    CLIENT_URL,
+
     "http://localhost:5173",
     
 ];
