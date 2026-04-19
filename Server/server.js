@@ -61,8 +61,12 @@ app.use('/api/payment', PaymentRoute)
 // Serve static files from the React app build directory
 app.use(express.static(path.join(process.cwd(), "../Client/dist")));
 
-// Catch all handler: send back React's index.html file for any non-API routes
+// Catch all handler: only for non-API routes (send back React's index.html for SPA)
 app.use((req, res) => {
+    // Don't serve HTML for API requests that reached here (they should have been handled above)
+    if (req.path.startsWith('/api/')) {
+        return res.status(404).json({ success: false, message: 'API route not found' });
+    }
     res.sendFile(path.join(process.cwd(), "../Client/dist/index.html"));
 });
 

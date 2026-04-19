@@ -321,11 +321,33 @@ const Pricing = () => {
             });
 
             console.log("API response status:", sessionRes.status);
-            const sessionData = await sessionRes.json();
+
+            let sessionData = null;
+            let rawText = "";
+            try {
+                rawText = await sessionRes.text();
+                console.log("Raw response:", rawText);
+                if (rawText && rawText.trim()) {
+                    sessionData = JSON.parse(rawText);
+                } else {
+                    console.warn("Empty response body from server");
+                }
+            } catch (parseErr) {
+                console.error("Failed to parse payment response:", parseErr);
+                console.error("Response text was:", rawText);
+                throw new Error(`Invalid response from payment server: ${parseErr.message}`);
+            }
+
+            if (!sessionRes.ok) {
+                const msg = sessionData?.message || `Payment request failed (${sessionRes.status})`;
+                console.error("Payment endpoint error:", { status: sessionRes.status, data: sessionData, rawText });
+                throw new Error(msg);
+            }
+
             console.log("Session data received:", sessionData);
 
-            if (!sessionData.success || !sessionData.payment_session_id) {
-                throw new Error(sessionData.message || "Failed to create checkout session");
+            if (!sessionData || !sessionData.success || !sessionData.payment_session_id) {
+                throw new Error(sessionData?.message || "Failed to create checkout session");
             }
 
             // Load Cashfree JS SDK if not already loaded

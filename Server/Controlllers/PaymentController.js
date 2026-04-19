@@ -103,7 +103,7 @@ export const createCheckoutSession = async (req, res) => {
 
         const paymentSessionId = response?.data?.payment_session_id;
         if (paymentSessionId) {
-            return res.status(200).json({
+            return res.status(200).set('Content-Type', 'application/json').json({
                 success: true,
                 payment_session_id: paymentSessionId,
                 order_id: orderId,
@@ -115,7 +115,7 @@ export const createCheckoutSession = async (req, res) => {
             data: response?.data,
             headers: response?.headers,
         });
-        return res.status(400).json({
+        return res.status(400).set('Content-Type', 'application/json').json({
             success: false,
             message: 'Order creation failed',
             cashfree: {
@@ -141,7 +141,7 @@ export const createCheckoutSession = async (req, res) => {
 
         // Return the actual status from Cashfree, or 500 if not available
         const statusCode = error?.response?.status || 500;
-        return res.status(statusCode).json(responseBody);
+        return res.status(statusCode).set('Content-Type', 'application/json').json(responseBody);
     }
 };
 
