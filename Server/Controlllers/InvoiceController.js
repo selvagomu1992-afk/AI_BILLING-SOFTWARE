@@ -4,7 +4,7 @@ import { getAuth } from "@clerk/express";
 import path from 'path';
 import BusinessProfile from "../Models/BusinessProfileModles.js";
 
-const API_BASE = 'https://ai-billing-software-4.onrender.com'
+const API_BASE = 'https://ai-billing-software-7.onrender.com'
 
 // computeTota [ subtotal, tax, total]
 const computeTotals = (items = [], taxPercent = 0) => {

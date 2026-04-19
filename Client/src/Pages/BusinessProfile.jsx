@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { businessProfileStyles, iconColors, customStyles } from '../assets/dummyStyles';
 import { useAuth, useUser } from '@clerk/clerk-react';
 
-const API_BASE = "https://ai-billing-software-4.onrender.com"
+const API_BASE = "https://ai-billing-software-7.onrender.com"
 
 //Icons
 const UploadIcon = ({ className = "w-5 h-5" }) => (

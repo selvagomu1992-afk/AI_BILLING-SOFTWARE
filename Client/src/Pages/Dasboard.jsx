@@ -5,7 +5,7 @@ import { useAuth } from '@clerk/clerk-react'
 import KpiCard from '../Components/KpiCard';
 import StatusBudge from '../Components/StatusBudge';
 
-const API_BASE = 'https://ai-billing-software-4.onrender.com';
+const API_BASE = 'https://ai-billing-software-7.onrender.com';
 
 function normalizeClient(raw) {
     if (!raw) return { name: "", email: "", address: "", phone: "" };

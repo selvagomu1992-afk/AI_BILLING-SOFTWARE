@@ -9,7 +9,7 @@ import {
 } from "../assets/dummyStyles";
 
 /* ---------- API BASE ---------- */
-const API_BASE = "https://ai-billing-software-4.onrender.com";
+const API_BASE = "https://ai-billing-software-7.onrender.com";
 
 /* ---------- storage helpers (unchanged) ---------- */
 /* ----------------- frontend-only: normalize image URLs ----------------- */

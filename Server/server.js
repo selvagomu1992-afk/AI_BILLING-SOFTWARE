@@ -16,7 +16,7 @@ const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 const PORT = process.env.PORT || 5000;
-const CLIENT_URL = process.env.CLIENT_URL || "https://ai-billing-software-4.onrender.com";
+const CLIENT_URL = process.env.CLIENT_URL || "https://ai-billing-software-7.onrender.com";
 
 
 
