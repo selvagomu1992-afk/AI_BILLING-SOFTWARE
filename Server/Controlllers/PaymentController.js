@@ -134,7 +134,7 @@ export const createCheckoutSession = async (req, res) => {
         console.error('Cashfree Create Order Error:', logged);
 
         const errorMessage =
-            (errorData && typeof errorData === 'object' && (errorData.message || errorData.error)) ||
+            (errorData && typeof errorData === 'object' && (errorData.message || errorData.error || errorData.description)) ||
             (typeof errorData === 'string' ? errorData : null) ||
             error?.message ||
             'Internal Server Error';
@@ -144,8 +144,12 @@ export const createCheckoutSession = async (req, res) => {
             cashfree: logged,
         };
 
-        // Return the actual status from Cashfree, or 500 if not available
-        const statusCode = error?.response?.status || 500;
+        // If Cashfree returned a 200 with an error payload, normalize to 400.
+        let statusCode = error?.response?.status;
+        if (!statusCode || statusCode < 400) {
+            statusCode = 400;
+        }
+
         return res.status(statusCode).set('Content-Type', 'application/json').json(responseBody);
     }
 };
