@@ -27,7 +27,7 @@ const app = express();
 //Middeleware
 const allowedOrigins = [
 
-    "http://localhost:5173",
+    "https://ai-billing-software-2.onrender.com",
     
 ];
 app.use(cors({
