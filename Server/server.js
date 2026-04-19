@@ -37,7 +37,7 @@ const allowedOrigins = [
     "http://127.0.0.1:5175",
     "http://localhost:5176",
     "http://127.0.0.1:5176",
-    "https://ai-billing-software-7.onrender.com"
+    "https://ai-billing-software-6.onrender.com"
 ];
 app.use(cors({
     origin: allowedOrigins,
