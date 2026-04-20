@@ -167,7 +167,16 @@ const Pricing = () => {
                 });
                 if (res.ok) {
                     const data = await res.json();
-                    if (data?.data && mounted) setUserProfile(data.data);
+                    if (data?.data && mounted) {
+                        setUserProfile(data.data);
+                        // If they already have an active paid plan, don't ask for a plan, go to dashboard
+                        if (data.data.subscriptionStatus === 'active' && 
+                            ['Professional', 'Enterprise'].includes(data.data.subscriptionPlan)) {
+                            // Check if they are trying to specifically upgrade/view pricing, or just landed here
+                            // For a forceful redirect, we can just navigate them out.
+                            navigate('/app/dashboard');
+                        }
+                    }
                 }
             } catch (err) {
                 console.error("Failed to fetch profile:", err);
@@ -175,7 +184,7 @@ const Pricing = () => {
         }
         fetchProfile();
         return () => mounted = false;
-    }, [isSignedIn, getToken]);
+    }, [isSignedIn, getToken, navigate]);
 
     const plans = {
         monthly: [
