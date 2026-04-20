@@ -419,6 +419,10 @@ const Pricing = () => {
 
                 const checkoutResult = await cashfree.checkout(checkoutOptions);
                 console.log("Checkout initiated successfully:", checkoutResult);
+                
+                if (checkoutResult.paymentDetails || checkoutResult.redirect) {
+                    navigate('/app/dashboard');
+                }
             } catch (checkoutError) {
                 console.error("Cashfree checkout error:", checkoutError);
                 throw new Error(`Checkout failed: ${checkoutError.message || checkoutError}`);

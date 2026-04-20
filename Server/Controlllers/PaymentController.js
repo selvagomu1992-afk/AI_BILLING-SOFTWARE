@@ -216,11 +216,13 @@ export const handleWebhook = async (req, res) => {
 export const handlePaymentSuccess = async (req, res) => {
     // Redirect to frontend success page
     const orderId = req.query.order_id;
-    res.redirect(`https://ai-billing-software-7.onrender.com/app/dashboard?payment=success&order_id=${orderId}`);
+    const clientUrl = process.env.CLIENT_URL || 'https://ai-billing-software-3.onrender.com';
+    res.redirect(`${clientUrl}/app/dashboard?payment=success&order_id=${orderId}`);
 };
 
 export const handlePaymentFailure = async (req, res) => {
     // Redirect to frontend with failure status
     const orderId = req.query.order_id;
-    res.redirect(`https://ai-billing-software-7.onrender.com/app/dashboard?payment=failure&order_id=${orderId}`);
+    const clientUrl = process.env.CLIENT_URL || 'https://ai-billing-software-3.onrender.com';
+    res.redirect(`${clientUrl}/app/dashboard?payment=failure&order_id=${orderId}`);
 };
