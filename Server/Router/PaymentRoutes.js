@@ -4,7 +4,7 @@ import { createCheckoutSession, handleWebhook, handlePaymentSuccess, handlePayme
 
 const router = express.Router();
 
-router.post('/create-checkout-session', createCheckoutSession);
+router.post('/create-checkout-session', requireAuth(), createCheckoutSession);
 router.post('/webhook', express.json(), handleWebhook);
 router.post('/success', express.urlencoded({ extended: true }), handlePaymentSuccess);
 router.post('/failure', express.urlencoded({ extended: true }), handlePaymentFailure);

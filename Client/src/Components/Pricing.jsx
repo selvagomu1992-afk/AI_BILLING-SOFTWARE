@@ -318,8 +318,8 @@ const Pricing = () => {
             const sessionRes = await fetch(sessionUrl, {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
-                    // Authorization: `Bearer ${token}` // Temporarily removed for testing
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
                 },
                 body: JSON.stringify({ plan: plan, period: billingPeriod })
             }).catch((err) => {

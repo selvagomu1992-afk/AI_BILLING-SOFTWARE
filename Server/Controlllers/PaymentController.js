@@ -45,11 +45,10 @@ const cashfree = new Cashfree(
 export const createCheckoutSession = async (req, res) => {
     console.log('createCheckoutSession invoked');
     try {
-        // const userId = req.auth?.userId;
-        // if (!userId) {
-        //     return res.status(401).json({ success: false, message: 'Unauthorized' });
-        // }
-        const userId = 'test_user'; // temporary for testing
+        const userId = req.auth?.userId;
+        if (!userId) {
+            return res.status(401).json({ success: false, message: 'Unauthorized' });
+        }
 
         if (!CASHFREE_APP_ID || !CASHFREE_SECRET_KEY) {
             console.error('Cashfree configuration missing', { CASHFREE_APP_ID: !!CASHFREE_APP_ID, CASHFREE_SECRET_KEY: !!CASHFREE_SECRET_KEY });
