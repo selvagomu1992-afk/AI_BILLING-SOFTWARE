@@ -106,7 +106,7 @@ export const createInvoice = async (req, res) => {
         if (plan === 'Starter') {
             const invoiceCount = await Invoice.countDocuments({ owner: userId });
             if (invoiceCount >= 5) {
-                if (status !== 'active' && profile?.subscriptionPlan !== 'Starter') {
+                if (status !== 'active' && profile && profile.subscriptionPlan && profile.subscriptionPlan !== 'Starter') {
                     return res.status(403).json({ success: false, message: "Subscription expired or inactive. Please renew your plan to create more invoices." });
                 }
                 return res.status(403).json({ success: false, message: "Free plan limit reached. Please upgrade to a monthly or yearly plan to create more invoices." });

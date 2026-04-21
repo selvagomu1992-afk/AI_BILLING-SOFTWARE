@@ -2,6 +2,7 @@ import axios from 'axios';
 import crypto from 'crypto';
 import { Cashfree, CFEnvironment } from 'cashfree-pg';
 import BusinessProfile from '../Models/BusinessProfileModles.js';
+import { getAuth } from '@clerk/express';
 
 // Cashfree configuration
 const CASHFREE_APP_ID = process.env.CASHFREE_APP_ID;
@@ -11,11 +12,18 @@ const CASHFREE_MODE = (process.env.CASHFREE_MODE || 'sandbox').toLowerCase();
 
 // Server URL configuration (used for return/notify URLs)
 const SERVER_PORT = process.env.PORT || 5000;
-const SERVER_PROTOCOL = CASHFREE_MODE === 'production' ? 'https' : 'http';
+const SERVER_PROTOCOL = process.env.SERVER_PROTOCOL || (CASHFREE_MODE === 'production' ? 'https' : 'http');
 const SERVER_HOST = process.env.SERVER_HOST || 'localhost';
-const SERVER_BASE_URL = process.env.CASHFREE_SERVER_URL || `${SERVER_PROTOCOL}://${SERVER_HOST}:${SERVER_PORT}`;
+let SERVER_BASE_URL = process.env.CASHFREE_SERVER_URL || `${SERVER_PROTOCOL}://${SERVER_HOST}:${SERVER_PORT}`;
 
-// Initialize Cashfree (with a logging axios instance for debugging auth issues)
+// Make sure webhook doesn't accidentally point to localhost in cloud
+if ((SERVER_BASE_URL.includes('localhost') || SERVER_BASE_URL.includes('127.0.0.1')) && process.env.NODE_ENV === 'production') {
+    SERVER_BASE_URL = 'https://ai-billing-software-7.onrender.com';
+}
+
+if (!process.env.CASHFREE_SERVER_URL && !process.env.SERVER_HOST && !process.env.NODE_ENV) {
+     SERVER_BASE_URL = 'https://ai-billing-software-7.onrender.com'; // Safe ultimate fallback for their specific render instance if env vars are completely missing
+}
 const cashfreeAxios = axios.create();
 
 cashfreeAxios.interceptors.request.use((config) => {
@@ -224,4 +232,65 @@ export const handlePaymentFailure = async (req, res) => {
     const orderId = req.query.order_id;
     const clientUrl = process.env.CLIENT_URL || 'https://ai-billing-software-3.onrender.com';
     res.redirect(`${clientUrl}/app/dashboard?payment=failure&order_id=${orderId}`);
+};
+export const verifyPaymentSuccess = async (req, res) => {
+    try {
+        const { userId } = getAuth(req) || {};
+        const { orderId, plan, period } = req.body;
+
+        if (!userId) {
+            return res.status(401).json({ success: false, message: "Authentication required" });
+        }
+
+        if (!orderId || !plan || !period) {
+            return res.status(400).json({ success: false, message: "Missing required fields" });
+        }
+
+        try {
+            const response = await cashfreeAxios.get(`${CASHFREE_BASE_URL.replace('/pg', '')}/pg/orders/${orderId}`, {
+                headers: {
+                    'x-client-id': CASHFREE_APP_ID,
+                    'x-client-secret': CASHFREE_SECRET_KEY,
+                    'x-api-version': '2023-08-01',
+                    'Accept': 'application/json'
+                }
+            });
+
+            if (response.data && response.data.order_status === 'PAID') {
+                let profile = await BusinessProfile.findOne({ owner: userId });
+
+                if (!profile) {
+                    profile = new BusinessProfile({ owner: userId, businessName: 'My Business' });
+                }
+
+                if (profile.subscriptionStatus === 'active' && profile.subscriptionPlan === plan) {
+                    return res.status(200).json({ success: true, message: 'Subscription already active' });
+                }
+
+                profile.subscriptionPlan = plan;
+                profile.subscriptionPeriod = period;
+                profile.subscriptionStatus = 'active';
+
+                const now = new Date();
+                if (period === 'annual') {
+                    now.setFullYear(now.getFullYear() + 1);
+                } else {
+                    now.setMonth(now.getMonth() + 1);
+                }
+                profile.subscriptionEndDate = now;
+
+                await profile.save();
+                console.log(`Verified order ${orderId} successfully for user ${userId}. Status is PAID.`);
+                return res.status(200).json({ success: true, message: 'Subscription activated' });
+            } else {
+                return res.status(400).json({ success: false, message: `Payment not completed. Status: ${response?.data?.order_status}` });
+            }
+        } catch (apiErr) {
+            console.error("Failed to fetch order from Cashfree:", apiErr?.response?.data || apiErr.message);
+            return res.status(500).json({ success: false, message: 'Failed to verify with payment gateway' });
+        }
+    } catch (error) {
+        console.error("verifyPaymentSuccess Error:", error);
+        res.status(500).json({ success: false, message: "Internal server error" });
+    }
 };

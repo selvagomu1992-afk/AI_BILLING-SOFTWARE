@@ -427,9 +427,26 @@ const Pricing = () => {
                 console.log("Checkout options:", checkoutOptions);
 
                 const checkoutResult = await cashfree.checkout(checkoutOptions);
-                console.log("Checkout initiated successfully:", checkoutResult);
-                
                 if (checkoutResult.paymentDetails || checkoutResult.redirect) {
+                    // Inform the backend it was successful (crucial for localhost testing without webhooks)
+                    try {
+                        let verifyToken = await getToken();
+                        const verifyRes = await fetch(`${resolvedApiBase}/api/payment/verify-success`, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                Authorization: `Bearer ${verifyToken}`
+                            },
+                            body: JSON.stringify({ 
+                                orderId: sessionData.order_id,
+                                plan: plan,
+                                period: billingPeriod 
+                            })
+                        });
+                        console.log("Local verification status:", verifyRes.status);
+                    } catch (verifyErr) {
+                        console.error("Local verification failed:", verifyErr);
+                    }
                     navigate('/app/dashboard');
                 }
             } catch (checkoutError) {
