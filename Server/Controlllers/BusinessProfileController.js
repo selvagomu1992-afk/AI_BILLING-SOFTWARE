@@ -106,37 +106,37 @@ export const updateBusinessProfile = async (req, res) => {
                 .json({ success: false, message: "Unauthorized" });
         }
 
-        // Build document
-        const doc = new BusinessProfile({
-            _id: id,
-            owner: userId, // associate invoice with Clerk userId
-            businessName: body.businessName || "ABC Solutions",
-            email: body.email || "",
-            phone: body.phone || "",
-            address: body.address || "",
-            gst: body.gst || "",
-            logoUrl: fileUrls.logoDataUrl || body.logoDataUrl || body.logo || null,
-            stampUrl: fileUrls.stampDataUrl || body.stampDataUrl || body.stamp || null,
-            signatureUrl: fileUrls.signatureDataUrl || body.signatureDataUrl || body.signature || null,
-            signatureOwnerName: body.signatureOwnerName || "",
-            signatureOwnerTitle: body.signatureOwnerTitle || "",
-            defaultTaxPercent: body.defaultTaxPercent || 18,
+        // Build update object
+        const updateObj = {
+            businessName: body.businessName || existingProfile.businessName,
+            email: body.email !== undefined ? body.email : existingProfile.email,
+            phone: body.phone !== undefined ? body.phone : existingProfile.phone,
+            address: body.address !== undefined ? body.address : existingProfile.address,
+            gst: body.gst !== undefined ? body.gst : existingProfile.gst,
+            logoUrl: fileUrls.logoDataUrl || body.logoDataUrl || body.logo || existingProfile.logoUrl,
+            stampUrl: fileUrls.stampDataUrl || body.stampDataUrl || body.stamp || existingProfile.stampUrl,
+            signatureUrl: fileUrls.signatureDataUrl || body.signatureDataUrl || body.signature || existingProfile.signatureUrl,
+            signatureOwnerName: body.signatureOwnerName !== undefined ? body.signatureOwnerName : existingProfile.signatureOwnerName,
+            signatureOwnerTitle: body.signatureOwnerTitle !== undefined ? body.signatureOwnerTitle : existingProfile.signatureOwnerTitle,
+            defaultTaxPercent: body.defaultTaxPercent !== undefined ? body.defaultTaxPercent : existingProfile.defaultTaxPercent,
+        };
 
-
-        });
-        const updated = await BusinessProfile.findByIdAndUpdate(id, doc, { new: true, runValidators: true });
+        const updated = await BusinessProfile.findByIdAndUpdate(
+            id, 
+            { $set: updateObj }, 
+            { new: true, runValidators: true }
+        );
 
         if (!updated) {
             return res
                 .status(404)
                 .json({ success: false, message: "Businessprofile not found" });
         }
-        saved = await doc.save();
 
-        res.status(201).json({
+        res.status(200).json({
             success: true,
             message: "Businessprofile updated successfully",
-            data: saved,
+            data: updated,
         });
     } catch (error) {
         console.error("Error updating Businessprofile:", error);

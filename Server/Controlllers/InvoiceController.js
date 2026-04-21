@@ -86,20 +86,30 @@ export const createInvoice = async (req, res) => {
         }
 
         const profile = await BusinessProfile.findOne({ owner: userId });
-        const plan = profile?.subscriptionPlan || 'Starter';
+        let plan = profile?.subscriptionPlan || 'Starter';
         const endDate = profile?.subscriptionEndDate;
+        const status = profile?.subscriptionStatus || 'inactive';
 
-        if (plan === 'Starter' || !endDate) {
+        // Check if the plan is actually active
+        if (plan !== 'Starter') {
+            if (status !== 'active') {
+                plan = 'Starter'; // Fall back to Starter limits if the subscription is inactive or cancelled
+            } else if (endDate) {
+                const now = new Date();
+                const expirationDate = new Date(endDate);
+                if (now.getTime() > expirationDate.getTime()) {
+                    plan = 'Starter'; // Fall back to Starter limits if the subscription expired
+                }
+            }
+        }
+
+        if (plan === 'Starter') {
             const invoiceCount = await Invoice.countDocuments({ owner: userId });
             if (invoiceCount >= 5) {
+                if (status !== 'active' && profile?.subscriptionPlan !== 'Starter') {
+                    return res.status(403).json({ success: false, message: "Subscription expired or inactive. Please renew your plan to create more invoices." });
+                }
                 return res.status(403).json({ success: false, message: "Free plan limit reached. Please upgrade to a monthly or yearly plan to create more invoices." });
-            }
-        } else {
-            // Paid plan logic: strictly enforce the end date
-            const now = new Date();
-            const expirationDate = new Date(endDate);
-            if (now.getTime() > expirationDate.getTime()) {
-                return res.status(403).json({ success: false, message: "Subscription expired. Please renew your plan to create more invoices." });
             }
         }
 
