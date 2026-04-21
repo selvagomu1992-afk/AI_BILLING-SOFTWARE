@@ -404,7 +404,7 @@ const Pricing = () => {
 
             // Initialize Cashfree
             console.log("Initializing Cashfree");
-            const cashfreeMode = (import.meta.env.VITE_CASHFREE_MODE || "sandbox").toLowerCase();
+            const cashfreeMode = (import.meta.env.VITE_CASHFREE_MODE || "production").toLowerCase();
             console.log("Cashfree mode:", cashfreeMode);
 
             if (!window.Cashfree || typeof window.Cashfree !== 'function') {

@@ -7,8 +7,8 @@ import { getAuth } from '@clerk/express';
 // Cashfree configuration
 const CASHFREE_APP_ID = process.env.CASHFREE_APP_ID;
 const CASHFREE_SECRET_KEY = process.env.CASHFREE_SECRET_KEY;
-const CASHFREE_BASE_URL = process.env.CASHFREE_BASE_URL || 'https://sandbox.cashfree.com';
-const CASHFREE_MODE = (process.env.CASHFREE_MODE || 'sandbox').toLowerCase();
+const CASHFREE_BASE_URL = process.env.CASHFREE_BASE_URL || 'https://api.cashfree.com';
+const CASHFREE_MODE = (process.env.CASHFREE_MODE || 'production').toLowerCase();
 
 // Server URL configuration (used for return/notify URLs)
 const SERVER_PORT = process.env.PORT || 5000;
